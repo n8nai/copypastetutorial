@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn to Copy and Paste</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to supplement Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff;
+        }
+        #animated-text-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        #animated-text {
+            position: absolute;
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #dbeafe;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 2px dashed #60a5fa;
+            font-weight: 500;
+            color: #1e40af;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 20px 10px rgba(59, 130, 246, 0); }
+        }
+        .text-highlight {
+            background-color: #93c5fd; /* A light blue for highlighting */
+            color: white;
+        }
+        #fake-cursor {
+            width: 24px;
+            height: 24px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M4 4l16 0l0 16l-4 -4l-4 4l-4 -4l-4 4Z" transform="rotate(90 12 12)"/></svg>');
+            position: absolute;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+            pointer-events: none;
+        }
+        #fake-menu {
+            position: absolute;
+            z-index: 99;
+            opacity: 0;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            width: 150px;
+            transition: all 0.2s ease-in-out;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        #fake-menu div {
+            padding: 0.5rem 1rem;
+        }
+        #fake-menu-copy {
+            background-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+
+    <div class="w-full max-w-2xl mx-auto">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-blue-800">Let's Learn How to Copy & Paste!</h1>
+            <p class="text-slate-600 mt-2">Follow the steps below. It's easy!</p>
+        </header>
+
+        <!-- Step 1: Demonstration Section -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-200 mb-8 relative">
+            <div id="animated-text-container"></div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Step 1: Watch the Demo</h2>
+            <p class="text-slate-600 mb-6">Click the "Start Demo" button to see how to copy text.</p>
+            
+            <div class="mb-6">
+                <p class="text-sm font-medium text-slate-500 mb-1">Text to copy:</p>
+                <div id="demo-copy-box" class="w-full bg-slate-100 p-3 rounded-lg text-slate-700">Hello, world!</div>
+            </div>
+
+            <div class="mt-6">
+                 <p class="text-sm font-medium text-slate-500 mb-1">Pasted here:</p>
+                <div id="demo-paste-box" class="w-full bg-slate-100 p-3 rounded-lg text-slate-400 min-h-[48px] flex items-center">(This box is waiting...)</div>
+            </div>
+
+             <div class="mt-6 text-center">
+                <button id="start-demo-button" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">
+                    Start Demo
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Practice Section -->
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-200">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4">Step 2: Your Turn!</h2>
+            <p class="text-slate-600 mb-6">Use your mouse to highlight the text below. Then, right-click on it and choose "Copy".</p>
+
+            <p class="text-sm font-medium text-slate-500 mb-1">1. Highlight and copy this text:</p>
+            <div id="test-copy-box" class="w-full bg-slate-100 p-3 rounded-lg text-slate-700 mb-6">
+                Practice makes perfect!
+            </div>
+            
+             <p class="text-sm font-medium text-slate-500 mb-1">2. Now, right-click in the box below and paste:</p>
+            <div id="test-paste-box" contenteditable="true" class="w-full bg-white p-3 rounded-lg border-2 border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200 min-h-[48px] transition" aria-label="Paste text here"></div>
+            
+            <div class="mt-6 text-center">
+                <button id="check-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-transform transform hover:scale-105">
+                    Check My Work
+                </button>
+                <div id="feedback" class="mt-4 text-lg font-semibold h-6"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Element References ---
+        const demoCopyBox = document.getElementById('demo-copy-box');
+        const demoPasteBox = document.getElementById('demo-paste-box');
+        const startDemoButton = document.getElementById('start-demo-button');
+        const animatedTextContainer = document.getElementById('animated-text-container');
+        const testCopyBox = document.getElementById('test-copy-box');
+        const testPasteBox = document.getElementById('test-paste-box');
+        const checkButton = document.getElementById('check-button');
+        const feedback = document.getElementById('feedback');
+        
+        // --- DEMONSTRATION LOGIC ---
+        startDemoButton.addEventListener('click', () => {
+            startDemoButton.disabled = true;
+            startDemoButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+            const originalText = demoCopyBox.innerText;
+            const textToCopy = "Hello, world!";
+
+            // 1. Highlight text
+            demoCopyBox.innerHTML = `<span class="text-highlight">${textToCopy}</span>`;
+            const highlightSpan = demoCopyBox.querySelector('span');
+            const startRect = highlightSpan.getBoundingClientRect();
+            const containerRect = animatedTextContainer.getBoundingClientRect();
+
+            // Create fake cursor and menu
+            const cursor = document.createElement('div');
+            cursor.id = 'fake-cursor';
+            animatedTextContainer.appendChild(cursor);
+
+            const menu = document.createElement('div');
+            menu.id = 'fake-menu';
+            menu.innerHTML = `<div>Cut</div><div id="fake-menu-copy">Copy</div><div>Paste</div>`;
+            animatedTextContainer.appendChild(menu);
+
+            // 2. Animate cursor moving to text
+            setTimeout(() => {
+                cursor.style.opacity = '1';
+                cursor.style.top = `${startRect.top - containerRect.top + 5}px`;
+                cursor.style.left = `${startRect.left - containerRect.left + startRect.width / 2}px`;
+            }, 500);
+
+            // 3. Show fake right-click menu
+            setTimeout(() => {
+                menu.style.opacity = '1';
+                menu.style.transform = 'scale(1)';
+                menu.style.top = `${startRect.top - containerRect.top + 25}px`;
+                menu.style.left = `${startRect.left - containerRect.left + startRect.width / 2 + 10}px`;
+            }, 1200);
+
+            // 4. Hide menu and start "flying text" animation
+            setTimeout(() => {
+                menu.remove();
+                cursor.remove();
+                
+                // --- Visual Animation ---
+                const animatedText = document.createElement('div');
+                animatedText.id = 'animated-text';
+                animatedText.innerText = textToCopy;
+                animatedTextContainer.appendChild(animatedText);
+                
+                const endRect = demoPasteBox.getBoundingClientRect();
+
+                animatedText.style.top = `${startRect.top - containerRect.top + startRect.height / 4}px`;
+                animatedText.style.left = `${startRect.left - containerRect.left + startRect.width / 4}px`;
+
+                setTimeout(() => {
+                    animatedText.style.opacity = '1';
+                    animatedText.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        animatedText.style.top = `${endRect.top - containerRect.top + endRect.height / 4}px`;
+                        animatedText.style.left = `${endRect.left - containerRect.left + endRect.width / 4}px`;
+                        animatedText.style.transform = 'scale(0.8)';
+                    }, 200);
+                }, 100);
+
+                setTimeout(() => {
+                    demoPasteBox.innerText = textToCopy;
+                    demoPasteBox.classList.remove('text-slate-400');
+                    demoPasteBox.classList.add('text-slate-800', 'font-medium');
+                    demoPasteBox.style.animation = 'pulse-glow 1s';
+                    animatedText.remove();
+                    demoCopyBox.innerHTML = originalText;
+                    
+                    // Re-enable button
+                    startDemoButton.disabled = false;
+                    startDemoButton.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                }, 1300);
+
+            }, 2200);
+        });
+
+        // --- PRACTICE LOGIC ---
+        checkButton.addEventListener('click', () => {
+            const pastedText = testPasteBox.innerText.trim();
+            const correctText = testCopyBox.innerText.trim();
+
+            if (pastedText === correctText) {
+                feedback.innerText = 'Correct! Great job!';
+                feedback.classList.remove('text-red-600');
+                feedback.classList.add('text-green-600');
+            } else {
+                feedback.innerText = 'Not quite. Please try again.';
+                feedback.classList.remove('text-green-600');
+                feedback.classList.add('text-red-600');
+            }
+        });
+        
+        testPasteBox.addEventListener('input', () => {
+            if (feedback.innerText !== '') {
+                feedback.innerText = '';
+            }
+        });
+
+        testPasteBox.addEventListener('paste', () => {
+             testPasteBox.style.animation = 'pulse-glow 1s';
+             setTimeout(()=> {
+                 testPasteBox.style.animation = '';
+             }, 1100)
+        });
+
+    </script>
+</body>
+</html>
